@@ -40,29 +40,31 @@ class _HomePageState extends State<HomePage> {
         ? Loader()
         : Scaffold(
             body: Row(children: [
-              LeftSide(
-                size: size,
-                field: TextField(
-                  controller: _controller,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  cursorColor: Colors.black,
-                  cursorWidth: 1.0,
-                  onChanged: (string) {
-                    setState(() {
-                      text = string;
-                    });
-                  },
-                  autofocus: true,
-                  style: editorStyle(
-                      color: Colors.black87, weight: FontWeight.w500, size: 18),
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Start Typing..",
-                      hintStyle: editorStyle(
-                          color: Colors.black54,
-                          weight: FontWeight.normal,
-                          size: 20)),
+              SingleChildScrollView(
+                child: LeftSide(
+                  size: size,
+                  field: TextField(
+                    controller: _controller,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    cursorColor: Colors.black,
+                    cursorWidth: 1.0,
+                    onChanged: (string) {
+                      setState(() {
+                        text = string;
+                      });
+                    },
+                    autofocus: true,
+                    style: editorStyle(
+                        color: Colors.black87, weight: FontWeight.w500, size: 18),
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Start Typing..",
+                        hintStyle: editorStyle(
+                            color: Colors.black54,
+                            weight: FontWeight.normal,
+                            size: 20)),
+                  ),
                 ),
               ),
               RightSide(
