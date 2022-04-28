@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+
 import 'package:flutter_md/pages/home_page.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
+
   WindowOptions windowOptions = WindowOptions(
     size: Size(1200, 800),
     center: true,

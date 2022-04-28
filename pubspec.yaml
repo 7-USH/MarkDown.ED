@@ -39,6 +39,8 @@ dependencies:
   loading_animation_widget: ^1.1.0+5
   google_fonts: ^2.3.2
   flutter_markdown: ^0.6.10
+  easy_sidemenu: ^0.2.1
+
 
 dev_dependencies:
   flutter_test:
