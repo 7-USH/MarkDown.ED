@@ -29,6 +29,10 @@ class _HomePageState extends State<HomePage> {
   FileIO fileIO = FileIO();
   String currentFilePath = "";
   String onWhichFile = "";
+  int initialLength = 0;
+  int newLength = 0;
+  Color color = Colors.orange;
+  bool modified = false;
 
   getWindowSize() async {
     size = await windowManager.getSize();
@@ -51,16 +55,32 @@ class _HomePageState extends State<HomePage> {
       body: Row(children: [
         LeftSide(
           whichFile: onWhichFile,
+          status: modified ? " ~ Modified" : "",
+          color: modified ? color : Colors.white,
           openFile: () async {
             _controller.text = await fileIO.readFromFile();
             text = _controller.text;
+            initialLength = text.length;
+            newLength = initialLength;
 
             currentFilePath = fileIO.currentFilePath;
             onWhichFile = basename(currentFilePath);
 
             RegExp regExp = RegExp(r"[\w-]+");
             count = regExp.allMatches(_controller.text).length;
-            setState(() {});
+            setState(() {
+              modified = false;
+            });
+          },
+          createNewFile: () async {
+            String newFileString = await fileIO.saveNewFile(currentFilePath);
+            newFileString = newFileString + ".md";
+            if (newFileString == "null.md") {
+              print("unable to create");
+            } else {
+              File createFile = File(newFileString);
+              createFile.writeAsString('');
+            }
           },
           saveFile: () async {
             String newFilePath = await fileIO.saveNewFile(currentFilePath);
@@ -74,7 +94,13 @@ class _HomePageState extends State<HomePage> {
             }
           },
           saveChanges: () async {
-            await fileIO.saveToFile(text,currentFilePath);
+            await fileIO.saveToFile(text, currentFilePath);
+            initialLength = newLength;
+            modified = false;
+            setState(() {});
+          },
+          downloadAsPDF: () {
+            //TODO:
           },
           size: size,
           count: count,
@@ -89,6 +115,10 @@ class _HomePageState extends State<HomePage> {
               onChanged: (string) {
                 setState(() {
                   text = _controller.text;
+                  newLength = _controller.text.length;
+                  if ((newLength != initialLength) && initialLength != 0) {
+                    modified = true;
+                  }
                   RegExp regExp = RegExp(r'[\w-]+');
                   count = regExp.allMatches(_controller.text).length;
                 });

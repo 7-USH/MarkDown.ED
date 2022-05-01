@@ -14,7 +14,11 @@ class LeftSide extends StatefulWidget {
       required this.saveChanges,
       required this.field,
       required this.count,
+      required this.createNewFile,
+      required this.color,
       required this.saveFile,
+      required this.status,
+      required this.downloadAsPDF,
       required this.openFile})
       : super(key: key);
   Size size;
@@ -24,6 +28,10 @@ class LeftSide extends StatefulWidget {
   Function openFile;
   Function saveFile;
   Function saveChanges;
+  Function createNewFile;
+  Function downloadAsPDF;
+  Color color;
+  String status;
 
   @override
   State<LeftSide> createState() => _LeftSideState();
@@ -36,6 +44,9 @@ class _LeftSideState extends State<LeftSide> {
   bool isHover2 = false;
   bool isHover3 = false;
   bool isHover4 = false;
+  bool isHover5 = false;
+
+  List<bool> onTappers = [false, false, false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +62,9 @@ class _LeftSideState extends State<LeftSide> {
               Row(children: [
                 Spacer(),
                 Text(
-                  widget.whichFile,
+                  widget.whichFile+widget.status,
                   style: editorStyle(
-                      color: Colors.white, weight: FontWeight.w500, size: 15),
+                      color: widget.color, weight: FontWeight.w500, size: 15),
                 ),
                 Spacer(),
                 Text(
@@ -102,6 +113,7 @@ class _LeftSideState extends State<LeftSide> {
                   InkWell(
                     onTap: () {
                       widget.openFile();
+                      onTappers[0] = true;
                     },
                     onHover: (value) {
                       setState(() {
@@ -136,6 +148,55 @@ class _LeftSideState extends State<LeftSide> {
                               style: editorStyle(
                                   color: Colors.black54,
                                   weight: isHover1
+                                      ? FontWeight.bold
+                                      : FontWeight.w500,
+                                  size: 18),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      widget.createNewFile();
+                    },
+                    onHover: (value) {
+                      setState(() {
+                        isHover5 = value;
+                      });
+                    },
+                    child: AnimatedOpacity(
+                      opacity: isTap ? 1.0 : 0.0,
+                      duration: isTap
+                          ? Duration(milliseconds: 500)
+                          : Duration(milliseconds: 0),
+                      curve: Curves.easeInOut,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.note_add_outlined,
+                            color: !isHover5
+                                ? Color.fromARGB(137, 53, 45, 45)
+                                : Colors.black.withOpacity(0.6),
+                            size: 18,
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Shimmer.fromColors(
+                            highlightColor:
+                                isHover2 ? Colors.grey : Colors.black,
+                            baseColor: Colors.black,
+                            child: Text(
+                              "Create New File",
+                              textAlign: TextAlign.left,
+                              style: editorStyle(
+                                  color: Colors.black54,
+                                  weight: isHover5
                                       ? FontWeight.bold
                                       : FontWeight.w500,
                                   size: 18),
@@ -262,7 +323,7 @@ class _LeftSideState extends State<LeftSide> {
                       child: Row(
                         children: [
                           Icon(
-                            Icons.publish,
+                            Icons.picture_as_pdf,
                             color: !isHover4
                                 ? Color.fromARGB(137, 53, 45, 45)
                                 : Colors.black.withOpacity(0.6),
@@ -276,7 +337,7 @@ class _LeftSideState extends State<LeftSide> {
                                 isHover4 ? Colors.grey : Colors.black,
                             baseColor: Colors.black,
                             child: Text(
-                              "Publish",
+                              "Download as PDF",
                               textAlign: TextAlign.left,
                               style: editorStyle(
                                   color: Colors.black54,
@@ -289,7 +350,7 @@ class _LeftSideState extends State<LeftSide> {
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

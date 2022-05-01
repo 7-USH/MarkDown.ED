@@ -16,8 +16,7 @@ class FileIO {
     PlatformFile file;    
     
     if (result == null) {
-      filePath = "";
-      return "";
+      return filePath;
     } else {
       file = result.files.single;
       filePath = file.path.toString();
