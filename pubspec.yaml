@@ -40,6 +40,8 @@ dependencies:
   google_fonts: ^2.3.2
   flutter_markdown: ^0.6.10
   easy_sidemenu: ^0.2.1
+  file_picker: ^4.5.1
+  shimmer: ^2.0.0
 
 
 dev_dependencies:

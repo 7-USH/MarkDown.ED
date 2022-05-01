@@ -1,12 +1,16 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_null_comparison, prefer_final_fields, avoid_unnecessary_containers, unused_field, deprecated_member_use, avoid_print
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_null_comparison, prefer_final_fields, avoid_unnecessary_containers, unused_field, deprecated_member_use, avoid_print, unused_local_variable, prefer_const_constructors_in_immutables
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_md/constants/constants.dart';
+import 'package:flutter_md/operations/file_io.dart';
 import 'package:flutter_md/widgets/leftside.dart';
 import 'package:flutter_md/widgets/loader.dart';
 import 'package:flutter_md/widgets/rightside.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:path/path.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -20,6 +24,11 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _controller = TextEditingController();
   int count = 0;
   String text = "";
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _nameController = TextEditingController();
+  FileIO fileIO = FileIO();
+  String currentFilePath = "";
+  String onWhichFile = "";
 
   getWindowSize() async {
     size = await windowManager.getSize();
@@ -29,24 +38,44 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getWindowSize();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(Duration(seconds: 2), () {
-    //   Navigator.push(context, MaterialPageRoute(builder: (_) {
-    //     return homeWidget();
-    //   }));
-    // });
-    return size.width==0 ? Loader() : homeWidget();
+    return size.width == 0 ? Loader() : homeWidget();
   }
 
   Scaffold homeWidget() {
     return Scaffold(
       body: Row(children: [
         LeftSide(
+          whichFile: onWhichFile,
+          openFile: () async {
+            _controller.text = await fileIO.readFromFile();
+            text = _controller.text;
+
+            currentFilePath = fileIO.currentFilePath;
+            onWhichFile = basename(currentFilePath);
+
+            RegExp regExp = RegExp(r"[\w-]+");
+            count = regExp.allMatches(_controller.text).length;
+            setState(() {});
+          },
+          saveFile: () async {
+            String newFilePath = await fileIO.saveNewFile(currentFilePath);
+            newFilePath = newFilePath + ".md";
+
+            if (newFilePath == "null.md") {
+              print("unable to save");
+            } else {
+              File newFile = File(newFilePath);
+              newFile.writeAsString(text);
+            }
+          },
+          saveChanges: () async {
+            await fileIO.saveToFile(text,currentFilePath);
+          },
           size: size,
           count: count,
           field: Theme(
@@ -59,9 +88,9 @@ class _HomePageState extends State<HomePage> {
               cursorWidth: 1.5,
               onChanged: (string) {
                 setState(() {
-                  text = string;
-                  RegExp regExp = RegExp(' ');
-                  count = regExp.allMatches(text).length;
+                  text = _controller.text;
+                  RegExp regExp = RegExp(r'[\w-]+');
+                  count = regExp.allMatches(_controller.text).length;
                 });
               },
               autofocus: true,
@@ -89,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                 ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes
               ],
             ),
-            data: text,
+            data: _controller.text,
           ),
         )
       ]),
