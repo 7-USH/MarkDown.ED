@@ -9,7 +9,7 @@ void main() async {
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = WindowOptions(
-    size: Size(1200, 800),
+    // size: Size(1200, 800),
     center: true,
     title: "EditorMD",
     backgroundColor: Colors.transparent,
@@ -19,6 +19,7 @@ void main() async {
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
+    await windowManager.setSize(Size(1200, 800));
     await windowManager.setMinimumSize(Size(1200, 800));
   });
   runApp(const MyApp());

@@ -5,8 +5,10 @@ import 'package:flutter_md/constants/constants.dart';
 import 'package:window_manager/window_manager.dart';
 
 class RightSide extends StatefulWidget {
-   RightSide({Key? key,required this.markdown}) : super(key: key);
+  RightSide({Key? key, required this.markdown, required this.onFullscreen})
+      : super(key: key);
   Widget markdown;
+  Function onFullscreen;
 
   @override
   State<RightSide> createState() => _RightSideState();
@@ -17,25 +19,34 @@ class _RightSideState extends State<RightSide> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Container(
+    return Container(
       decoration: BoxDecoration(color: gradColor),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
-                    Icon(Icons.preview,size: 18,),
-                    SizedBox(width: 15,),
-                    Text("Markdown Preview",style: editorStyle(color: Colors.black, weight: FontWeight.w500, size: 15),),
+                    Icon(
+                      Icons.preview,
+                      size: 18,
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "Markdown Preview",
+                      style: editorStyle(
+                          color: Colors.black,
+                          weight: FontWeight.w500,
+                          size: 15),
+                    ),
                   ],
                 ),
-              ),  
+              ),
               Expanded(child: Container()),
               IconButton(
                   onPressed: () async {
@@ -46,7 +57,7 @@ class _RightSideState extends State<RightSide> {
                       await DesktopWindow.setFullScreen(false);
                       isFull = false;
                     }
-
+                    widget.onFullscreen();
                     setState(() {});
                   },
                   icon:
@@ -63,18 +74,17 @@ class _RightSideState extends State<RightSide> {
                   icon: Icon(Icons.close)),
             ],
           ),
-          Expanded(child: Container(
-            margin: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              // border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: kBoxShadows,
-              color: gradColor
-            ),
-            
-            child: widget.markdown))
+          Expanded(
+              child: Container(
+                  margin: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                      // border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: kBoxShadows,
+                      color: gradColor),
+                  child: widget.markdown))
         ],
       ),
-    ));
+    );
   }
 }

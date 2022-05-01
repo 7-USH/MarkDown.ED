@@ -38,340 +38,50 @@ class LeftSide extends StatefulWidget {
 }
 
 class _LeftSideState extends State<LeftSide> {
-  bool isTap = false;
-
-  bool isHover1 = false;
-  bool isHover2 = false;
-  bool isHover3 = false;
-  bool isHover4 = false;
-  bool isHover5 = false;
-
-  List<bool> onTappers = [false, false, false, false, false];
+  
 
   @override
   Widget build(BuildContext context) {
+    print(widget.size.height);
+
     return Container(
-      width: widget.size.width / 2,
+      width: widget.size.width/2,
       decoration: BoxDecoration(color: scaffoldColor),
-      child: Stack(children: [
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(children: [
-                Spacer(),
-                Text(
-                  widget.whichFile + widget.status,
-                  style: editorStyle(
-                      color: widget.color, weight: FontWeight.w500, size: 15),
-                ),
-                Spacer(),
-                Text(
-                  widget.count.toString() + " words",
-                  style: editorStyle(
-                      color: Colors.white, weight: FontWeight.w500, size: 15),
-                )
-              ]),
-              Padding(
-                  padding: const EdgeInsets.all(25.0),
-                  child: Container(
-                      height: widget.size.height / 1.15,
-                      child: SingleChildScrollView(
-                          controller: ScrollController(),
-                          physics: BouncingScrollPhysics(),
-                          child: widget.field))),
-            ],
-          ),
-        ),
-        AnimatedPositioned(
-          left: isTap ? VISIBLE_WIDTH : INVISIBLE_WIDTH,
-          duration: const Duration(milliseconds: 100),
-          child: Container(
-            width: 300,
-            height: widget.size.height,
-            decoration: BoxDecoration(
-              color: gradColor,
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(40),
-                  bottomRight: Radius.circular(40)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: Offset.zero,
-                ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: SizedBox(
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(children: [
+                  Spacer(),
+                  Text(
+                    widget.whichFile + widget.status,
+                    style: editorStyle(
+                        color: widget.color, weight: FontWeight.w500, size: 15),
+                  ),
+                  Spacer(),
+                  Text(
+                    widget.count.toString() + " words",
+                    style: editorStyle(
+                        color: Colors.white, weight: FontWeight.w500, size: 15),
+                  )
+                ]),
+                Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: Container(
+                        height: widget.size.height / 1.15,
+                        child: SingleChildScrollView(
+                            controller: ScrollController(),
+                            physics: BouncingScrollPhysics(),
+                            child: widget.field))),
               ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 200,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      widget.openFile();
-                      onTappers[0] = true;
-                    },
-                    onHover: (value) {
-                      setState(() {
-                        isHover1 = value;
-                      });
-                    },
-                    child: AnimatedOpacity(
-                      opacity: isTap ? 1.0 : 0.0,
-                      duration: isTap
-                          ? Duration(milliseconds: 500)
-                          : Duration(milliseconds: 0),
-                      curve: Curves.easeInOut,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.file_open,
-                            color: !isHover1
-                                ? Color.fromARGB(137, 53, 45, 45)
-                                : Colors.black.withOpacity(0.6),
-                            size: 18,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Shimmer.fromColors(
-                            highlightColor:
-                                isHover1 ? Colors.grey : Colors.black,
-                            baseColor: Colors.black,
-                            child: Text(
-                              "Open File",
-                              textAlign: TextAlign.left,
-                              style: editorStyle(
-                                  color: Colors.black54,
-                                  weight: isHover1
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
-                                  size: 18),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      widget.createNewFile();
-                    },
-                    onHover: (value) {
-                      setState(() {
-                        isHover5 = value;
-                      });
-                    },
-                    child: AnimatedOpacity(
-                      opacity: isTap ? 1.0 : 0.0,
-                      duration: isTap
-                          ? Duration(milliseconds: 500)
-                          : Duration(milliseconds: 0),
-                      curve: Curves.easeInOut,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.note_add_outlined,
-                            color: !isHover5
-                                ? Color.fromARGB(137, 53, 45, 45)
-                                : Colors.black.withOpacity(0.6),
-                            size: 18,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Shimmer.fromColors(
-                            highlightColor:
-                                isHover2 ? Colors.grey : Colors.black,
-                            baseColor: Colors.black,
-                            child: Text(
-                              "Create New File",
-                              textAlign: TextAlign.left,
-                              style: editorStyle(
-                                  color: Colors.black54,
-                                  weight: isHover5
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
-                                  size: 18),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      widget.saveChanges();
-                    },
-                    onHover: (value) {
-                      setState(() {
-                        isHover2 = value;
-                      });
-                    },
-                    child: AnimatedOpacity(
-                      opacity: isTap ? 1.0 : 0.0,
-                      duration: isTap
-                          ? Duration(milliseconds: 500)
-                          : Duration(milliseconds: 0),
-                      curve: Curves.easeInOut,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.create,
-                            color: !isHover2
-                                ? Color.fromARGB(137, 53, 45, 45)
-                                : Colors.black.withOpacity(0.6),
-                            size: 18,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Shimmer.fromColors(
-                            highlightColor:
-                                isHover2 ? Colors.grey : Colors.black,
-                            baseColor: Colors.black,
-                            child: Text(
-                              "Save Changes",
-                              textAlign: TextAlign.left,
-                              style: editorStyle(
-                                  color: Colors.black54,
-                                  weight: isHover2
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
-                                  size: 18),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      widget.saveFile();
-                    },
-                    onHover: (value) {
-                      setState(() {
-                        isHover3 = value;
-                      });
-                    },
-                    child: AnimatedOpacity(
-                      opacity: isTap ? 1.0 : 0.0,
-                      duration: isTap
-                          ? Duration(milliseconds: 500)
-                          : Duration(milliseconds: 0),
-                      curve: Curves.easeInOut,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.save_as,
-                            color: !isHover3
-                                ? Color.fromARGB(137, 53, 45, 45)
-                                : Colors.black.withOpacity(0.6),
-                            size: 18,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Shimmer.fromColors(
-                            highlightColor:
-                                isHover3 ? Colors.grey : Colors.black,
-                            baseColor: Colors.black,
-                            child: Text(
-                              "Save as New File",
-                              textAlign: TextAlign.left,
-                              style: editorStyle(
-                                  color: Colors.black54,
-                                  weight: isHover3
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
-                                  size: 18),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      widget.downloadAsPDF();
-                    },
-                    onHover: (value) {
-                      setState(() {
-                        isHover4 = value;
-                      });
-                    },
-                    child: AnimatedOpacity(
-                      opacity: isTap ? 1.0 : 0.0,
-                      duration: isTap
-                          ? Duration(milliseconds: 500)
-                          : Duration(milliseconds: 0),
-                      curve: Curves.easeInOut,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.picture_as_pdf,
-                            color: !isHover4
-                                ? Color.fromARGB(137, 53, 45, 45)
-                                : Colors.black.withOpacity(0.6),
-                            size: 18,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Shimmer.fromColors(
-                            highlightColor:
-                                isHover4 ? Colors.grey : Colors.black,
-                            baseColor: Colors.black,
-                            child: Text(
-                              "Download as PDF",
-                              textAlign: TextAlign.left,
-                              style: editorStyle(
-                                  color: Colors.black54,
-                                  weight: isHover4
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
-                                  size: 18),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  isTap = !isTap;
-                });
-              },
-              child: Icon(
-                isTap ? Icons.close : Icons.dashboard,
-                color: !isTap ? Colors.white : Colors.black54,
-              )),
-        ),
-      ]),
+      ),
     );
   }
 }
