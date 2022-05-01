@@ -1,8 +1,9 @@
-// ignore_for_file: unnecessary_string_interpolations, prefer_typing_uninitialized_variables, avoid_print
+// ignore_for_file: unnecessary_string_interpolations, prefer_typing_uninitialized_variables, avoid_print, unused_local_variable
 
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
+import 'package:path/path.dart';
+import 'package:webcontent_converter/webcontent_converter.dart';
 
 class FileIO {
   String filePath = "";
@@ -13,8 +14,8 @@ class FileIO {
         type: FileType.custom,
         allowedExtensions: ['md']);
 
-    PlatformFile file;    
-    
+    PlatformFile file;
+
     if (result == null) {
       return filePath;
     } else {
@@ -30,7 +31,7 @@ class FileIO {
         dialogTitle: "Save file as",
         initialDirectory: initialDirectory,
         type: FileType.custom,
-        allowedExtensions: ['md']);
+        allowedExtensions: ['pdf']);
 
     return result.toString();
   }
@@ -44,6 +45,18 @@ class FileIO {
   Future<File> saveToFile(String data, String currentFilePath) async {
     final file = File(currentFilePath);
     return file.writeAsString(data);
+  }
+
+  Future<String> savePDF(String htmlData, String currentFilePath) async {
+    String pdfPath = await saveNewFile(currentFilePath);
+    pdfPath = pdfPath + ".pdf";
+    String target = basename(pdfPath);
+    var result = await WebcontentConverter.contentToPDF(
+        content: htmlData,
+        savedPath: pdfPath,
+        format: PaperFormat.a4,
+        margins: PdfMargins.px(top: 55, bottom: 55, right: 55, left: 55));
+    return result.toString();
   }
 
   Future<String> readFromFile() async {

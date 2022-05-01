@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_null_comparison, prefer_final_fields, avoid_unnecessary_containers, unused_field, deprecated_member_use, avoid_print, unused_local_variable, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_null_comparison, prefer_final_fields, avoid_unnecessary_containers, unused_field, deprecated_member_use, avoid_print, unused_local_variable, prefer_const_constructors_in_immutables, prefer_is_empty
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -99,8 +99,15 @@ class _HomePageState extends State<HomePage> {
             modified = false;
             setState(() {});
           },
-          downloadAsPDF: () {
-            //TODO:
+          downloadAsPDF: () async {
+            if (!modified &&
+                _controller.text.length != 0 &&
+                (currentFilePath != "null.md" &&
+                    currentFilePath != null &&
+                    currentFilePath != "")) {
+              String htmlCode = md.markdownToHtml(_controller.text);
+              await fileIO.savePDF(htmlCode, currentFilePath);
+            }
           },
           size: size,
           count: count,

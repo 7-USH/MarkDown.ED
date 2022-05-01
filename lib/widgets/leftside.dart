@@ -62,7 +62,7 @@ class _LeftSideState extends State<LeftSide> {
               Row(children: [
                 Spacer(),
                 Text(
-                  widget.whichFile+widget.status,
+                  widget.whichFile + widget.status,
                   style: editorStyle(
                       color: widget.color, weight: FontWeight.w500, size: 15),
                 ),
@@ -308,7 +308,9 @@ class _LeftSideState extends State<LeftSide> {
                     height: 30,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      widget.downloadAsPDF();
+                    },
                     onHover: (value) {
                       setState(() {
                         isHover4 = value;
