@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   String onWhichFile = "";
   int initialLength = 0;
   int newLength = 0;
-  Color color = Colors.orange;
+  Color color = Colors.red;
   bool modified = false;
   bool isFileExist = false;
 
