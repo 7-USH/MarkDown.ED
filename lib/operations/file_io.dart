@@ -26,12 +26,12 @@ class FileIO {
     return file.path.toString();
   }
 
-  Future<String> saveNewFile(String initialDirectory) async {
+  Future<String> saveNewFile(String initialDirectory,String type) async {
     String? result = await FilePicker.platform.saveFile(
         dialogTitle: "Save file as",
         initialDirectory: initialDirectory,
         type: FileType.custom,
-        allowedExtensions: ['pdf']);
+        allowedExtensions: [type]);
 
     return result.toString();
   }
@@ -48,7 +48,7 @@ class FileIO {
   }
 
   Future<String> savePDF(String htmlData, String currentFilePath) async {
-    String pdfPath = await saveNewFile(currentFilePath);
+    String pdfPath = await saveNewFile(currentFilePath,'pdf');
     pdfPath = pdfPath + ".pdf";
     String target = basename(pdfPath);
     var result = await WebcontentConverter.contentToPDF(
@@ -56,7 +56,7 @@ class FileIO {
         savedPath: pdfPath,
         format: PaperFormat.a4,
         margins: PdfMargins.px(top: 55, bottom: 55, right: 55, left: 55));
-    return result.toString();
+    return pdfPath;
   }
 
   Future<String> readFromFile() async {

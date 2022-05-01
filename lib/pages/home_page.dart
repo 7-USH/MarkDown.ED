@@ -8,6 +8,7 @@ import 'package:flutter_md/operations/file_io.dart';
 import 'package:flutter_md/widgets/leftside.dart';
 import 'package:flutter_md/widgets/loader.dart';
 import 'package:flutter_md/widgets/rightside.dart';
+import 'package:flutter_md/widgets/timeloader.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:path/path.dart';
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   int newLength = 0;
   Color color = Colors.orange;
   bool modified = false;
+  bool isFileExist = false;
 
   getWindowSize() async {
     size = await windowManager.getSize();
@@ -47,10 +49,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return size.width == 0 ? Loader() : homeWidget();
+    return size.width == 0 ? Loader() : homeWidget(context);
   }
 
-  Scaffold homeWidget() {
+  Scaffold homeWidget(BuildContext context) {
     return Scaffold(
       body: Row(children: [
         LeftSide(
@@ -73,7 +75,8 @@ class _HomePageState extends State<HomePage> {
             });
           },
           createNewFile: () async {
-            String newFileString = await fileIO.saveNewFile(currentFilePath);
+            String newFileString =
+                await fileIO.saveNewFile(currentFilePath, 'md');
             newFileString = newFileString + ".md";
             if (newFileString == "null.md") {
               print("unable to create");
@@ -83,7 +86,8 @@ class _HomePageState extends State<HomePage> {
             }
           },
           saveFile: () async {
-            String newFilePath = await fileIO.saveNewFile(currentFilePath);
+            String newFilePath =
+                await fileIO.saveNewFile(currentFilePath, 'md');
             newFilePath = newFilePath + ".md";
 
             if (newFilePath == "null.md") {
@@ -106,7 +110,13 @@ class _HomePageState extends State<HomePage> {
                     currentFilePath != null &&
                     currentFilePath != "")) {
               String htmlCode = md.markdownToHtml(_controller.text);
-              await fileIO.savePDF(htmlCode, currentFilePath);
+              String filePath = await fileIO.savePDF(htmlCode, currentFilePath);
+              isFileExist = await File(filePath).exists();
+              if (isFileExist) {
+                Navigator.push(context, MaterialPageRoute(builder: (_) {
+                  return TimeLoader();
+                }));
+              }
             }
           },
           size: size,
