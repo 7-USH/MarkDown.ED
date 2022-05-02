@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
   bool isHover3 = false;
   bool isHover4 = false;
   bool isHover5 = false;
+  bool isDownloading = false;
 
   List<bool> onTappers = [false, false, false, false, false];
 
@@ -79,67 +80,6 @@ class _HomePageState extends State<HomePage> {
                   whichFile: onWhichFile,
                   status: modified ? " ~ Modified" : "",
                   color: modified ? color : Colors.white,
-                  openFile: () async {
-                    _controller.text = await fileIO.readFromFile();
-                    text = _controller.text;
-                    initialLength = text.length;
-                    newLength = initialLength;
-
-                    currentFilePath = fileIO.currentFilePath;
-                    onWhichFile = basename(currentFilePath);
-
-                    RegExp regExp = RegExp(r"[\w-]+");
-                    count = regExp.allMatches(_controller.text).length;
-                    setState(() {
-                      modified = false;
-                    });
-                  },
-                  createNewFile: () async {
-                    String newFileString =
-                        await fileIO.saveNewFile(currentFilePath, 'md');
-                    newFileString = newFileString + ".md";
-                    if (newFileString == "null.md") {
-                      print("unable to create");
-                    } else {
-                      File createFile = File(newFileString);
-                      createFile.writeAsString('');
-                    }
-                  },
-                  saveFile: () async {
-                    String newFilePath =
-                        await fileIO.saveNewFile(currentFilePath, 'md');
-                    newFilePath = newFilePath + ".md";
-
-                    if (newFilePath == "null.md") {
-                      print("unable to save");
-                    } else {
-                      File newFile = File(newFilePath);
-                      newFile.writeAsString(text);
-                    }
-                  },
-                  saveChanges: () async {
-                    await fileIO.saveToFile(text, currentFilePath);
-                    initialLength = newLength;
-                    modified = false;
-                    setState(() {});
-                  },
-                  downloadAsPDF: () async {
-                    if (!modified &&
-                        _controller.text.length != 0 &&
-                        (currentFilePath != "null.md" &&
-                            currentFilePath != null &&
-                            currentFilePath != "")) {
-                      String htmlCode = md.markdownToHtml(_controller.text);
-                      String filePath =
-                          await fileIO.savePDF(htmlCode, currentFilePath);
-                      isFileExist = await File(filePath).exists();
-                      if (isFileExist) {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) {
-                          return TimeLoader();
-                        }));
-                      }
-                    }
-                  },
                   size: size,
                   count: count,
                   field: Theme(
@@ -180,6 +120,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(
                 child: RightSide(
+                  isDownloading: isDownloading,
                   onFullscreen: () {
                     getWindowSize();
                     setState(() {});
@@ -202,24 +143,6 @@ class _HomePageState extends State<HomePage> {
               )
             ]),
           ),
-          // Scaffold(
-          //   backgroundColor: Colors.transparent,
-          //   appBar: AppBar(
-          //     shadowColor: Colors.transparent,
-          //     backgroundColor: Colors.transparent,
-          //     foregroundColor: Colors.transparent,
-          //     elevation: 0,
-          //   ),
-          //   drawer: Drawer(
-          //     backgroundColor: Colors.transparent,
-          //     elevation: 0,
-          //     child: Container(decoration: BoxDecoration(
-          //       color: Colors.red,
-          //       borderRadius: BorderRadius.only(
-          //         topRight: Radius.circular(40),
-          //         bottomRight: Radius.circular(40))),),
-          //   ),
-          // )
           AnimatedPositioned(
             left: isTap ? VISIBLE_WIDTH : INVISIBLE_WIDTH,
             duration: const Duration(milliseconds: 100),
@@ -482,11 +405,17 @@ class _HomePageState extends State<HomePage> {
                             (currentFilePath != "null.md" &&
                                 currentFilePath != null &&
                                 currentFilePath != "")) {
+                          isDownloading = true;
+                          setState(() {});
                           String htmlCode = md.markdownToHtml(_controller.text);
                           String filePath =
                               await fileIO.savePDF(htmlCode, currentFilePath);
                           isFileExist = await File(filePath).exists();
                           if (isFileExist) {
+                            isDownloading = false;
+                            setState(() {
+                              
+                            });
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (_) {
                               return TimeLoader();

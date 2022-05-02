@@ -11,25 +11,20 @@ class LeftSide extends StatefulWidget {
       {Key? key,
       required this.size,
       required this.whichFile,
-      required this.saveChanges,
+    
       required this.field,
       required this.count,
-      required this.createNewFile,
+      
       required this.color,
-      required this.saveFile,
+     
       required this.status,
-      required this.downloadAsPDF,
-      required this.openFile})
+      })
       : super(key: key);
   Size size;
   int count;
   Widget field;
   String whichFile;
-  Function openFile;
-  Function saveFile;
-  Function saveChanges;
-  Function createNewFile;
-  Function downloadAsPDF;
+ 
   Color color;
   String status;
 
