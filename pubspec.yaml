@@ -43,8 +43,8 @@ dependencies:
   file_picker: ^4.5.1
   shimmer: ^2.0.0
   markdown: ^5.0.0
-  webcontent_converter: ^0.0.7+1
-
+  # webcontent_converter: ^0.0.7+1
+  webcontent_converter2: ^0.0.7+1
 
 dev_dependencies:
   flutter_test:

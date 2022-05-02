@@ -3,7 +3,7 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart';
-import 'package:webcontent_converter/webcontent_converter.dart';
+import 'package:webcontent_converter2/webcontent_converter2.dart';
 
 class FileIO {
   String filePath = "";
@@ -51,7 +51,7 @@ class FileIO {
     String pdfPath = await saveNewFile(currentFilePath,'pdf');
     pdfPath = pdfPath + ".pdf";
     String target = basename(pdfPath);
-    var result = await WebcontentConverter.contentToPDF(
+    var result = await WebcontentConverter2.contentToPDF(
         content: htmlData,
         savedPath: pdfPath,
         format: PaperFormat.a4,

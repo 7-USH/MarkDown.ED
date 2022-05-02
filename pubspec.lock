@@ -413,10 +413,10 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-  webcontent_converter:
+  webcontent_converter2:
     dependency: "direct main"
     description:
-      name: webcontent_converter
+      name: webcontent_converter2
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.7+1"
