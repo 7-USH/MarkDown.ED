@@ -19,6 +19,8 @@ void main() async {
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
+    await windowManager.center();
+    await windowManager.setAsFrameless();
     await windowManager.setSize(Size(1200, 800));
     await windowManager.setMinimumSize(Size(1200, 800));
   });

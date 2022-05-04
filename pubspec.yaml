@@ -45,6 +45,7 @@ dependencies:
   markdown: ^5.0.0
   # webcontent_converter: ^0.0.7+1
   webcontent_converter2: ^0.0.7+1
+  url_launcher:
 
 dev_dependencies:
   flutter_test:

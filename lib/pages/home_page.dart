@@ -9,7 +9,9 @@ import 'package:flutter_md/widgets/leftside.dart';
 import 'package:flutter_md/widgets/loader.dart';
 import 'package:flutter_md/widgets/rightside.dart';
 import 'package:flutter_md/widgets/timeloader.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:path/path.dart';
@@ -106,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                       style: editorStyle(
                           color: Colors.white,
                           weight: FontWeight.w500,
-                          size: 18),
+                          size: 15),
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "Start Typing..",
@@ -127,7 +129,29 @@ class _HomePageState extends State<HomePage> {
                   },
                   markdown: Markdown(
                     selectable: true,
+                    onTapLink: (text, url, title){
+                        launch(url!);
+                      },
                     styleSheet: MarkdownStyleSheet(
+                      textScaleFactor: 1,
+                      h1: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),
+                      h2: TextStyle(fontWeight: FontWeight.bold),
+                      h3: TextStyle(fontWeight: FontWeight.bold),
+                      h4: TextStyle(fontWeight: FontWeight.bold),
+                      code: GoogleFonts.jetBrainsMono(
+                        backgroundColor: Colors.transparent,
+                        color: Colors.white,
+                        
+                      ),
+                      codeblockDecoration: BoxDecoration(
+                        color: Color(0xff2F2F2F),
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      blockquoteDecoration: BoxDecoration(
+                        border: Border.all(color: Colors.black.withOpacity(0.2)),
+                        color: Colors.white70,
+                        borderRadius: BorderRadius.circular(10)
+                      ),
                         horizontalRuleDecoration:
                             BoxDecoration(color: Colors.black26)),
                     extensionSet: md.ExtensionSet(
@@ -175,10 +199,10 @@ class _HomePageState extends State<HomePage> {
                         text = _controller.text;
                         initialLength = text.length;
                         newLength = initialLength;
-
+    
                         currentFilePath = fileIO.currentFilePath;
                         onWhichFile = basename(currentFilePath);
-
+    
                         RegExp regExp = RegExp(r"[\w-]+");
                         count = regExp.allMatches(_controller.text).length;
                         setState(() {
@@ -345,7 +369,7 @@ class _HomePageState extends State<HomePage> {
                         String newFilePath =
                             await fileIO.saveNewFile(currentFilePath, 'md');
                         newFilePath = newFilePath + ".md";
-
+    
                         if (newFilePath == "null.md") {
                           print("unable to save");
                         } else {
