@@ -7,24 +7,21 @@ const double VISIBLE_WIDTH = 0;
 const double INVISIBLE_WIDTH = -300;
 
 class LeftSide extends StatefulWidget {
-  LeftSide(
-      {Key? key,
-      required this.size,
-      required this.whichFile,
-    
-      required this.field,
-      required this.count,
-      
-      required this.color,
-     
-      required this.status,
-      })
-      : super(key: key);
+  LeftSide({
+    Key? key,
+    required this.size,
+    required this.whichFile,
+    required this.field,
+    required this.count,
+    required this.color,
+    required this.controller,
+    required this.status,
+  }) : super(key: key);
   Size size;
   int count;
   Widget field;
   String whichFile;
- 
+  ScrollController controller;
   Color color;
   String status;
 
@@ -33,14 +30,11 @@ class LeftSide extends StatefulWidget {
 }
 
 class _LeftSideState extends State<LeftSide> {
-  
-
   @override
   Widget build(BuildContext context) {
-    print(widget.size.height);
 
     return Container(
-      width: widget.size.width/2,
+      width: widget.size.width / 2,
       decoration: BoxDecoration(color: scaffoldColor),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -69,7 +63,7 @@ class _LeftSideState extends State<LeftSide> {
                     child: Container(
                         height: widget.size.height / 1.15,
                         child: SingleChildScrollView(
-                            controller: ScrollController(),
+                            controller: widget.controller,
                             physics: BouncingScrollPhysics(),
                             child: widget.field))),
               ],

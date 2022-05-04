@@ -69,6 +69,10 @@ class _HomePageState extends State<HomePage> {
     return size.width == 0 ? Loader() : homeWidget(context);
   }
 
+  ScrollController _scrollController1 = ScrollController();
+  ScrollController _scrollController2 = ScrollController();
+
+
   Widget homeWidget(BuildContext context) {
     return Scaffold(
       body: SizedBox(
@@ -79,6 +83,7 @@ class _HomePageState extends State<HomePage> {
             child: Row(children: [
               Expanded(
                 child: LeftSide(
+                  controller: _scrollController1,
                   whichFile: onWhichFile,
                   status: modified ? " ~ Modified" : "",
                   color: modified ? color : Colors.white,
@@ -128,30 +133,30 @@ class _HomePageState extends State<HomePage> {
                     setState(() {});
                   },
                   markdown: Markdown(
+                    controller: _scrollController2,
                     selectable: true,
-                    onTapLink: (text, url, title){
-                        launch(url!);
-                      },
+                    onTapLink: (text, url, title) {
+                      launch(url!);
+                    },
                     styleSheet: MarkdownStyleSheet(
-                      textScaleFactor: 1,
-                      h1: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),
-                      h2: TextStyle(fontWeight: FontWeight.bold),
-                      h3: TextStyle(fontWeight: FontWeight.bold),
-                      h4: TextStyle(fontWeight: FontWeight.bold),
-                      code: GoogleFonts.jetBrainsMono(
-                        backgroundColor: Colors.transparent,
-                        color: Colors.white,
-                        
-                      ),
-                      codeblockDecoration: BoxDecoration(
-                        color: Color(0xff2F2F2F),
-                        borderRadius: BorderRadius.circular(10)
-                      ),
-                      blockquoteDecoration: BoxDecoration(
-                        border: Border.all(color: Colors.black.withOpacity(0.2)),
-                        color: Colors.white70,
-                        borderRadius: BorderRadius.circular(10)
-                      ),
+                        textScaleFactor: 1,
+                        h1: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 30),
+                        h2: TextStyle(fontWeight: FontWeight.bold),
+                        h3: TextStyle(fontWeight: FontWeight.bold),
+                        h4: TextStyle(fontWeight: FontWeight.bold),
+                        code: GoogleFonts.jetBrainsMono(
+                          backgroundColor: Colors.transparent,
+                          color: Colors.white,
+                        ),
+                        codeblockDecoration: BoxDecoration(
+                            color: Color(0xff2F2F2F),
+                            borderRadius: BorderRadius.circular(10)),
+                        blockquoteDecoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.black.withOpacity(0.2)),
+                            color: Colors.white70,
+                            borderRadius: BorderRadius.circular(10)),
                         horizontalRuleDecoration:
                             BoxDecoration(color: Colors.black26)),
                     extensionSet: md.ExtensionSet(
@@ -199,10 +204,10 @@ class _HomePageState extends State<HomePage> {
                         text = _controller.text;
                         initialLength = text.length;
                         newLength = initialLength;
-    
+
                         currentFilePath = fileIO.currentFilePath;
                         onWhichFile = basename(currentFilePath);
-    
+
                         RegExp regExp = RegExp(r"[\w-]+");
                         count = regExp.allMatches(_controller.text).length;
                         setState(() {
@@ -369,7 +374,7 @@ class _HomePageState extends State<HomePage> {
                         String newFilePath =
                             await fileIO.saveNewFile(currentFilePath, 'md');
                         newFilePath = newFilePath + ".md";
-    
+
                         if (newFilePath == "null.md") {
                           print("unable to save");
                         } else {
@@ -437,9 +442,7 @@ class _HomePageState extends State<HomePage> {
                           isFileExist = await File(filePath).exists();
                           if (isFileExist) {
                             isDownloading = false;
-                            setState(() {
-                              
-                            });
+                            setState(() {});
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (_) {
                               return TimeLoader();
