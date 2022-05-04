@@ -1,11 +1,11 @@
-![logo](images\markdownEd.png) 
+![](markdownEd.png) 
 # MarkDown.ED
  >An Open source desktop Markdown Editor made using flutter.
  >
  >The license of this project is General Public License(GPL).
 - ----
 ## ScreenShots
-![image1](images\ss1.png)
+![](ss1.png)
 - ---- 
 ## Features
 The editor has the following **features**:
