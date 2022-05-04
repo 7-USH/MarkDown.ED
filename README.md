@@ -1,4 +1,6 @@
 ![](markdownEd.png) 
+![](https://img.shields.io/badge/license-GPL%20License-blue.svg)
+
 # MarkDown.ED
  #### An Open source desktop Markdown Editor made using flutter.
  
